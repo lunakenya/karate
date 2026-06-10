@@ -1,7 +1,6 @@
 ================================================================================
   CONCLUSIONES TÉCNICAS
   Proyecto : Automatización API Demoblaze con Karate DSL
-  Versión  : 2.0
   Fecha    : 2026-06-10
 ================================================================================
 
@@ -95,9 +94,6 @@ preexistente en el servidor compartido de Demoblaze. El flujo es:
   Paso 1: Registrar un usuario nuevo dinámico (dup_<timestamp>) → ""
   Paso 2: Intentar registrar el mismo usuario nuevamente → errorMessage
 
-Esto garantiza que cualquier evaluador puede ejecutar el proyecto desde
-cero sin configuración previa y obtener el resultado esperado.
-
 ================================================================================
 2. DECISIONES DE DISEÑO
 ================================================================================
@@ -122,9 +118,6 @@ Los payloads JSON externos usan expresiones de interpolación de Karate:
 
 Karate resuelve estas expresiones en tiempo de ejecución usando las variables
 del contexto actual (inicializadas por karate-config.js).
-
-ALTERNATIVA EVALUADA: Variables hardcoded en payloads. Descartada porque
-requiere editar múltiples archivos si cambian las credenciales.
 
 2.3  Schemas semánticos con marcadores Karate
 --------------------------------------------
@@ -253,28 +246,44 @@ DEBILIDADES:
 6. CONCLUSIÓN GENERAL
 ================================================================================
 
-El proyecto demuestra una automatización API de nivel profesional que:
+La solución desarrollada cumple satisfactoriamente los requisitos planteados en
+el reto técnico, automatizando los procesos de registro y autenticación de
+usuarios mediante Karate DSL, JUnit 5 y Maven.
 
-  1. Cubre los 4 casos obligatorios del reto (TC-001, TC-002, TC-005, TC-006)
-     más 6 escenarios adicionales de valor (TC-003, TC-004, TC-007, TC-008/009/010)
+Además de los cuatro escenarios solicitados originalmente, se incorporaron
+casos adicionales orientados a ampliar la cobertura funcional, validar rutas
+alternativas y demostrar el uso de funcionalidades avanzadas del framework,
+como Scenario Outline, reutilización de componentes y validación mediante
+schemas externos.
+Durante la implementación se aplicaron buenas prácticas de automatización:
 
-  2. Externaliza correctamente datos, payloads y schemas — sin datos quemados
-     en el código Gherkin
+• Separación de datos de prueba, payloads y schemas.
+• Configuración centralizada mediante karate-config.js.
+• Uso de datos dinámicos para evitar dependencias externas.
+• Validaciones basadas en el comportamiento real de la API.
+• Generación automática de reportes para facilitar el análisis de resultados.
 
-  3. Centraliza credenciales en karate-config.js sobreescribibles por CLI
+Uno de los hallazgos más relevantes fue identificar que la API utiliza el
+código HTTP 200 tanto para respuestas exitosas como para errores funcionales.
+Por esta razón, las validaciones fueron diseñadas considerando el contenido
+del body de la respuesta y no únicamente el código de estado HTTP.
 
-  4. Valida semánticamente el body en TODOS los escenarios, no solo el status
-     code — crítico dado el comportamiento no-REST de la API
+Asimismo, se identificaron oportunidades de mejora relacionadas con la gestión
+de errores, el manejo de tokens de autenticación y la independencia de los
+datos de prueba, aspectos que fueron documentados como recomendaciones futuras.
 
-  5. Usa Scenario Outline en ambas features con tablas de datos bien estructuradas
+En conclusión, este ejercicio permitió demostrar competencias en:
 
-  6. Tiene runners diferenciados (@smoke para validación rápida, suite completa
-     para regresión) con reportes HTML automáticos
+• Automatización de APIs REST.
+• Diseño y ejecución de casos de prueba.
+• Análisis de comportamiento de servicios.
+• Validación de respuestas y contratos.
+• Documentación técnica de hallazgos.
+• Uso de Karate DSL para pruebas automatizadas.
 
-El hallazgo más relevante del reto es que la API Demoblaze no implementa
-semántica REST correcta. Esta adaptación — validar resultado por body y no
-por status code — es una habilidad central de un QA Automation Engineer:
-entender el comportamiento real del sistema bajo prueba y diseñar las
-validaciones en consecuencia, sin asumir que la API sigue convenciones estándar.
+
+El resultado final es una solución funcional, mantenible y fácilmente
+ejecutable, alineada con los objetivos del reto técnico y con prácticas
+comúnmente utilizadas en proyectos de aseguramiento de calidad de software.
 
 ================================================================================
