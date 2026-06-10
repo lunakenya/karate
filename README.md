@@ -209,7 +209,7 @@ git clone https://github.com/lunakenya/karate.git
 ```
 
 ```bash
-cd tu-repositorio
+cd karate
 ```
 
 ---
