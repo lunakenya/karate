@@ -1,185 +1,341 @@
 # 🚀 Demoblaze API Automation Challenge
 
-Automatización de pruebas para los servicios **Signup** y **Login** de la plataforma Demoblaze, desarrollada bajo estándares de calidad de software y buenas prácticas de QA Automation.
+Suite de automatización para validar los servicios de autenticación de la plataforma Demoblaze utilizando **Karate DSL**, **JUnit 5** y **Maven**.
 
-## 📖 Descripción
+El proyecto fue diseñado siguiendo principios de **QA Automation**, priorizando:
 
-Este proyecto implementa una suite automatizada de pruebas para validar los endpoints de autenticación de **Demoblaze**.
-
-La solución fue desarrollada utilizando **Karate DSL**, una herramienta moderna para pruebas de APIs REST que permite escribir escenarios de prueba de forma declarativa, reduciendo significativamente el código repetitivo y mejorando la mantenibilidad.
-
-### Objetivos de la Automatización
-
-✅ Validar creación exitosa de usuarios.
-
-✅ Detectar intentos de registro duplicado.
-
-✅ Verificar autenticaciones válidas.
-
-✅ Validar manejo de contraseñas incorrectas.
-
-✅ Comprobar comportamiento ante usuarios inexistentes.
-
-✅ Generar reportes ejecutivos y técnicos automáticamente.
+* Mantenibilidad
+* Escalabilidad
+* Reutilización
+* Independencia de datos
+* Ejecuciones reproducibles
 
 ---
-## 🛠️ Stack Tecnológico
 
-| Tecnología | Versión | Propósito               |
-| ---------- | ------- | ----------------------- |
-| Karate DSL | 1.5.2   | Automatización de APIs  |
-| Java       | 17+     | Plataforma de ejecución |
-| Maven      | 3.8+    | Gestión de dependencias |
-| JUnit      | 5       | Ejecución de pruebas    |
-| Git        | Última  | Control de versiones    |
+<p align="center">
+
+![Karate DSL](https://img.shields.io/badge/Karate%20DSL-v1.5.2-6f42c1?style=for-the-badge)
+
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge\&logo=openjdk)
+
+![JUnit](https://img.shields.io/badge/JUnit-5-25A162?style=for-the-badge\&logo=junit5)
+
+![Maven](https://img.shields.io/badge/Maven-3.8+-C71A36?style=for-the-badge\&logo=apachemaven)
+
+</p>
+
 ---
-## 📂 Estructura del Proyecto
+
+# 📖 Descripción
+
+Este proyecto automatiza la validación de los endpoints:
+
+```http
+POST /signup
+POST /login
+```
+
+de la API pública de Demoblaze:
 
 ```text
-.
-├── src
-│   └── test
-│       ├── java
-│       │   └── runners
-│       │       └── TestRunner.java
-│       │
-│       └── resources
-│           └── features
-│               ├── signup.feature
-│               └── login.feature
-│
-├── target
-│   └── karate-reports
+https://api.demoblaze.com
+```
+
+La suite valida tanto flujos exitosos como escenarios negativos, incluyendo:
+
+* Registro de usuarios
+* Detección de duplicados
+* Inicio de sesión exitoso
+* Contraseñas incorrectas
+* Usuarios inexistentes
+* Validación de tokens
+* Escenarios parametrizados mediante tablas de datos
+
+---
+
+# 🎯 Objetivos
+
+✅ Verificar el comportamiento funcional de Signup.
+
+✅ Verificar el comportamiento funcional de Login.
+
+✅ Detectar respuestas inconsistentes.
+
+✅ Validar contratos de respuesta mediante schemas.
+
+✅ Garantizar independencia entre escenarios.
+
+✅ Generar evidencia automática mediante reportes HTML.
+
+---
+
+# 🛠 Stack Tecnológico
+
+| Tecnología       | Uso                     |
+| ---------------- | ----------------------- |
+| Karate DSL 1.5.2 | Automatización de APIs  |
+| Java 17          | Runtime                 |
+| Maven            | Gestión de dependencias |
+| JUnit 5          | Ejecución               |
+| Git              | Control de versiones    |
+
+---
+
+# 📂 Estructura del Proyecto
+
+```text
+karate-main
 │
 ├── pom.xml
 ├── README.md
 ├── readme.txt
 ├── conclusiones.txt
-└── .gitignore
+│
+└── src
+    └── test
+        ├── java
+        │
+        ├── api
+        │   └── demoblaze
+        │       ├── signup.feature
+        │       └── login.feature
+        │
+        ├── common
+        │   ├── payloads
+        │   │   ├── login-valid.json
+        │   │   └── login-invalid.json
+        │   │
+        │   └── schemas
+        │       ├── signup-success-response.json
+        │       ├── signup-error-response.json
+        │       ├── login-success-response.json
+        │       └── login-error-response.json
+        │
+        ├── helpers
+        │   └── assert-token.feature
+        │
+        ├── runners
+        │   ├── ChallengeTest.java
+        │   └── SmokeTest.java
+        │
+        └── karate-config.js
 ```
-
-### Descripción de Archivos
-
-| Archivo            | Descripción                               |
-| ------------------ | ----------------------------------------- |
-| `signup.feature`   | Casos de prueba para registro de usuarios |
-| `login.feature`    | Casos de prueba para autenticación        |
-| `TestRunner.java`  | Runner principal de ejecución             |
-| `pom.xml`          | Configuración Maven                       |
-| `README.md`        | Documentación principal                   |
-| `readme.txt`       | Guía rápida solicitada por el reto        |
-| `conclusiones.txt` | Hallazgos y recomendaciones QA            |
 
 ---
 
-## 📋 Requisitos Previos
+# ⚙️ Arquitectura de Automatización
 
-Antes de ejecutar la suite, asegúrese de contar con:
+La solución fue diseñada bajo una arquitectura desacoplada:
 
-### Java
+### Features
+
+Contienen la lógica de negocio de los escenarios.
+
+```text
+signup.feature
+login.feature
+```
+
+### Payloads
+
+Centralizan los cuerpos de solicitud.
+
+```text
+common/payloads
+```
+
+### Schemas
+
+Permiten validar contratos de respuesta.
+
+```text
+common/schemas
+```
+
+### Helpers
+
+Componentes reutilizables.
+
+```text
+helpers/assert-token.feature
+```
+
+### Configuración Global
+
+Variables compartidas entre todos los escenarios.
+
+```text
+karate-config.js
+```
+
+---
+
+# 📋 Requisitos Previos
+
+## Java
 
 ```bash
 java -version
 ```
 
-Versión requerida:
+Resultado esperado:
 
 ```text
-Java 17 o superior
+Java 17+
 ```
 
-### Maven
+---
+
+## Maven
 
 ```bash
 mvn -version
 ```
-Versión requerida:
+
+Resultado esperado:
 
 ```text
-Maven 3.8 o superior
+Apache Maven 3.8+
 ```
-### Conexión a Internet
 
-Necesaria para:
-
-* Descarga inicial de dependencias.
-* Consumo de los endpoints públicos de Demoblaze.
 ---
 
-## 🚀 Instalación y Ejecución
+# 🚀 Instalación
 
-### 1️⃣ Clonar el repositorio
+## Clonar repositorio
 
 ```bash
-git clone https://github.com/lunakenya/tu-repositorio.git
+git clone https://github.com/lunakenya/karate.git
 ```
-
-Ingresar al proyecto:
 
 ```bash
 cd tu-repositorio
 ```
+
 ---
 
-### 2️⃣ Ejecutar todas las pruebas
+# ▶️ Ejecución
+
+## Ejecutar toda la suite
 
 ```bash
 mvn clean test
 ```
 
-Este comando:
-
-* Limpia compilaciones anteriores.
-* Descarga dependencias.
-* Ejecuta todos los escenarios.
-* Genera reportes automáticos.
 ---
 
-### 3️⃣ Ejecutar con parámetros personalizados (Opcional)
+## Ejecutar únicamente Smoke Tests
 
 ```bash
-mvn test \
--DtestUser=usuario_custom \
--DtestPassword=password_custom123
+mvn test -Dkarate.options="--tags @smoke"
 ```
----
-
-## 📊 Matriz de Cobertura de Pruebas
-
-| ID     | Endpoint     | Escenario                   | Resultado Esperado                   |
-| ------ | ------------ | --------------------------- | ------------------------------------ |
-| TC-001 | POST /signup | Registro exitoso de usuario | 200 OK + creación exitosa            |
-| TC-002 | POST /signup | Usuario duplicado           | 200 OK + "This user already exists." |
-| TC-003 | POST /login  | Login exitoso               | 200 OK + Auth_token                  |
-| TC-004 | POST /login  | Contraseña incorrecta       | 200 OK + "Wrong password."           |
-| TC-005 | POST /login  | Usuario inexistente         | 200 OK + "User does not exist."      |
 
 ---
 
-## 🧪 Casos Cubiertos
+## Ejecutar únicamente Login
 
-### Signup
-
-* Registro de usuario nuevo.
-* Validación de usuario existente.
-* Verificación de mensajes de respuesta.
-
-### Login
-
-* Inicio de sesión exitoso.
-* Password incorrecto.
-* Usuario inexistente.
-* Validación de token de autenticación.
+```bash
+mvn test -Dkarate.options="--tags @login"
+```
 
 ---
 
-## 🏗️ Consideración Arquitectónica
+## Ejecutar únicamente Signup
 
-> La API de Demoblaze devuelve siempre un estado HTTP **200 OK**, incluso cuando ocurre un error de negocio.
+```bash
+mvn test -Dkarate.options="--tags @signup"
+```
 
-Por este motivo, las validaciones automatizadas se realizan principalmente sobre el contenido del payload JSON y no únicamente sobre el código HTTP.
+---
+
+## Ejecutar Regresión
+
+```bash
+mvn test -Dkarate.options="--tags @regression"
+```
+
+---
+
+# 📊 Cobertura de Pruebas
+
+## Signup
+
+| ID     | Escenario                         |
+| ------ | --------------------------------- |
+| TC-001 | Crear usuario dinámico            |
+| TC-002 | Usuario duplicado                 |
+| TC-003 | Usuario dinámico mediante Outline |
+| TC-004 | Usuario preexistente              |
+
+---
+
+## Login
+
+| ID     | Escenario                            |
+| ------ | ------------------------------------ |
+| TC-005 | Login exitoso                        |
+| TC-006 | Password incorrecto                  |
+| TC-007 | Usuario inexistente                  |
+| TC-008 | Login válido mediante Outline        |
+| TC-009 | Password incorrecto mediante Outline |
+| TC-010 | Usuario inexistente mediante Outline |
+
+---
+
+# 🔍 Estrategias Implementadas
+
+## Usuarios Dinámicos
+
+Para evitar dependencia de datos existentes:
+
+```javascript
+var timestamp = System.currentTimeMillis()
+```
+
+Generando usuarios como:
+
+```text
+user_1752791999999
+```
+
+---
+
+## Validación por Schemas
 
 Ejemplo:
+
+```karate
+And match response == schema
+```
+
+Permite verificar estructura y contrato sin depender de valores específicos.
+
+---
+
+## Scenario Outline
+
+Uso de tablas de datos para maximizar cobertura.
+
+```karate
+Scenario Outline:
+Examples:
+```
+
+Beneficios:
+
+* Menos duplicación
+* Mayor mantenibilidad
+* Fácil ampliación
+
+---
+
+# ⚠️ Hallazgo Importante de la API
+
+Durante la automatización se identificó que Demoblaze utiliza un patrón poco convencional:
+
+## Todos los escenarios retornan HTTP 200
+
+Incluso para errores de negocio:
 
 ```json
 {
@@ -187,56 +343,105 @@ Ejemplo:
 }
 ```
 
+o
+
+```json
+{
+  "errorMessage": "User does not exist."
+}
+```
+
+Por lo tanto:
+
+> Un HTTP 200 NO garantiza una operación exitosa.
+
+La validación debe realizarse inspeccionando el payload de respuesta.
+
 ---
 
-## 📈 Reportes de Ejecución
+# 🔐 Comportamiento del Token
 
-Karate genera reportes HTML automáticamente después de cada ejecución.
+La API devuelve:
+
+```text
+Auth_token: xxxxxxxxxxx
+```
+
+El token:
+
+* No es JWT
+* No posee firma verificable
+* Parece construirse a partir del usuario y timestamp
+
+Por esta razón se implementó una validación específica:
+
+```text
+helpers/assert-token.feature
+```
+
+---
+
+# 📈 Reportes
+
+Karate genera reportes HTML automáticamente.
 
 Ubicación:
+
+```text
+target/karate-reports/
+```
+
+Reporte principal:
 
 ```text
 target/karate-reports/karate-summary.html
 ```
 
-Abrir en cualquier navegador:
+---
 
-* Google Chrome
-* Firefox
-* Microsoft Edge
-* Safari
+# 📷 Información Disponible en los Reportes
+
+* Tiempo de respuesta
+* Headers
+* Request Payload
+* Response Payload
+* Resultado por escenario
+* Logs de ejecución
+* Evidencia completa
 
 ---
 
-## 📊 Ejemplo de Resultado Esperado
+# 🧪 Resultado Esperado
 
 ```text
-Tests run: 5
-Passed: 5
-Failed: 0
-Skipped: 0
+[INFO] Tests run: 10
+[INFO] Failures: 0
+[INFO] Errors: 0
+[INFO] BUILD SUCCESS
 ```
-
-## 🎯 Buenas Prácticas Aplicadas
-
-✔ Uso de datos dinámicos.
-
-✔ Escenarios independientes.
-
-✔ Código mantenible.
-
-✔ Validaciones explícitas.
-
-✔ Separación de responsabilidades.
-
-✔ Reportería automática.
 
 ---
 
-## 👨‍💻 Autor
+# 🧠 Conclusiones
+
+La solución implementada demuestra:
+
+* Automatización desacoplada
+* Uso correcto de Karate DSL
+* Cobertura positiva y negativa
+* Datos autónomos
+* Validación de contratos
+* Escalabilidad para futuras APIs
+
+Para el análisis completo consulte:
+
+```text
+conclusiones.txt
+```
+
+---
+
+# 👨‍💻 Autor
 
 **Luna Kenya**
-
-📫 Especializada en automatización de pruebas, calidad de software y validación de APIs REST.
-
 ---
