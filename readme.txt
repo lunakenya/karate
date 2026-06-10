@@ -1,6 +1,6 @@
 ================================================================================
-  RETO TÉCNICO: Automatización API Demoblaze con Karate DSL
-  readme.txt | Versión 2.0
+  RETO TÉCNICO: Automatización API Demoblaze con Karate 
+  readme.txt 
 ================================================================================
 
 DESCRIPCIÓN
@@ -175,6 +175,7 @@ CÓMO REPRODUCIR EL RETO DESDE CERO
 ================================================================================
 
 1. Clonar o descomprimir el proyecto en una máquina con Java 17 y Maven.
+https://github.com/lunakenya/karate.git
 2. Ejecutar directamente: mvn test
    → TC-001 y TC-002 son autónomos y no requieren setup previo.
    → TC-005/006/007 usan el usuario por defecto (test_existing_usr).
